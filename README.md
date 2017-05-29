@@ -1,9 +1,9 @@
+> The only changes introduced by me are to enable saving the trained graph with variables as a protobuf file for use in our realtime openFrameworks (c++) style transfer application [ofFasterStyle](https://github.com/olekristensen/ofFasterStyle).
+> - Ole Kristensen
+
 ## Fast Style Transfer in [TensorFlow](https://github.com/tensorflow/tensorflow)
 
 Add styles from famous paintings to any photo in a fraction of a second! [You can even style videos!](#video-stylization)
-
-> The only changes introduced by me are to enable saving the trained graph with variables as a protobuf file for use in our realtime openFrameworks (c++) style transfer application [ofFasterStyle](https://github.com/olekristensen/ofFasterStyle).
-> - Ole Kristensen
 
 <p align = 'center'>
 <img src = 'examples/style/udnie.jpg' height = '246px'>
