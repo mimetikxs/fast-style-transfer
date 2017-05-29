@@ -154,7 +154,11 @@ def ffwd(data_in, paths_out, checkpoint_dir, device_t='/gpu:0', batch_size=4):
                 raise Exception("No checkpoint found...")
         else:
             saver.restore(sess, checkpoint_dir)
-
+            
+        # Ugly hack to save trained model with the image dimensions etc. from the input image
+        if os.path.isdir(checkpoint_dir):
+            save(checkpoint_dir, "of", sess)
+	
         num_iters = int(len(paths_out)/batch_size)
         for i in range(num_iters):
             pos = i * batch_size
