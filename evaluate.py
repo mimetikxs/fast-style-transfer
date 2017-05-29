@@ -237,6 +237,33 @@ def check_opts(opts):
         exists(opts.out_path, 'out dir not found!')
         assert opts.batch_size > 0
 
+def save(path, fname, sess):
+    # Write flow graph to disk
+    # MEGA UGLY HACK BECAUSE TENSOR FLOW DOESN'T SAVE VARIABLES
+    # NB. tf.train.write_graph won't save value of variables (yet?)
+    # so need to save value of variables as constants, 
+    # and then in C++ push the constants back to the vars :S
+    # based on https://stackoverflow.com/questions/34343259/is-there-an-example-on-how-to-generate-protobuf-files-holding-trained-tensorflow/34343517
+
+    
+    for v in tf.all_variables():
+        vc = tf.constant(v.eval(sess))
+        n = v.name.split(":")[0]    # get name (not sure what the :0 is)
+        tf.assign(v, vc, name=n+"_VARHACK")        
+    
+    graph_raw = sess.graph_def
+    # graph_frz = tf.graph_util.convert_variables_to_constants(sess, graph_raw, ['img_placeholder'])
+        
+    fname = fname+".pb";
+    print("Saving to ", path+"/"+fname, "...")
+    tf.train.write_graph(graph_raw, path, fname, as_text=False)      
+
+    fname = fname+".txt";
+    print("Saving to ", path+"/"+fname, "...")
+    tf.train.write_graph(graph_raw, path, fname, as_text=True)      
+    
+    print("...done.")
+        
 def main():
     parser = build_parser()
     opts = parser.parse_args()
